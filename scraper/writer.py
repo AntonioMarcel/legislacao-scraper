@@ -1,6 +1,6 @@
 from dataclasses import asdict
 import json
-from models import Legislacao
+from .models import Legislacao
 
 class JsonlWriter:
     def __init__(self, filepath):
