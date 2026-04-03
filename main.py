@@ -1,21 +1,20 @@
-from scraper import Legislacao, JsonlWriter
+import asyncio
+from playwright.async_api import async_playwright
+from scraper import Legislacao, JsonlWriter, Parser, SELECTORS
 
-leg1 = Legislacao(
-    titulo="Decreto nº 12.911",
-    ementa="Declara de interesse social para fins de desapropriação",
-    link_norma="https://www.planalto.gov.br/...",
-    link_ficha="https://legislacao.presidencia.gov.br/..."
-)
+async def main():
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False)
+        page = await browser.new_page()
 
-leg2 = Legislacao(
-    titulo="Medida Provisória nº 1.347",
-    ementa="Abre crédito extraordinário no valor de R$ 285.000.000,00",
-    link_norma=None,
-    link_ficha=None
-)
+        await page.goto("https://legislacao.presidencia.gov.br/#")
+        await page.locator("a.nav-link.dropdown-toggle.pl-4.pr-4.mr-2.btn.btn-secondary.btn-round.text-white.d-none.d-sm-block").click()
+        await page.wait_for_selector(SELECTORS["cards"])
 
-with JsonlWriter("test_output.jsonl") as writer:
-    writer.write(leg1)
-    writer.write(leg2)
+        p = Parser()
+        await p.parse(page)
+        input("Enter para fechar o navegador")
+        await browser.close()
 
-print("Feito! Abre o test_output.jsonl e confere.")
+asyncio.run(main())
+

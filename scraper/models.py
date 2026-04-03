@@ -5,7 +5,7 @@ from typing import Optional
 class Legislacao:
     titulo: str
     ementa: str
-    status: str
-    link_norma: Optional[str] = None
+    status: Optional[str] = None
     link_ficha: Optional[str] = None
+    link_norma: Optional[str] = None
 
