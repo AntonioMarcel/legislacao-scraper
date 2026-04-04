@@ -1,5 +1,7 @@
-from dataclasses import asdict
 import json
+from dataclasses import asdict
+from pathlib import Path
+
 from .models import Legislacao
 
 class JsonlWriter:
@@ -7,14 +9,15 @@ class JsonlWriter:
         self.filepath = filepath
 
     def __enter__(self):
+        Path(self.filepath).parent.mkdir(parents=True, exist_ok=True)
         self._file = open(self.filepath, "w", encoding="utf-8")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self._file.close()
 
-    def write(self, leg: Legislacao):
-        leg_dict = asdict(leg)
+    def write(self, legislacao_obj: Legislacao):
+        leg_dict = asdict(legislacao_obj)
         leg_json = json.dumps(leg_dict, ensure_ascii=False)
         self._file.write(f"{leg_json}\n")
         self._file.flush()

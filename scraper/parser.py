@@ -13,7 +13,13 @@ class Parser:
             titulo = titulo.replace("Veto Parcial", "").strip()
             status = await card.locator(SELECTORS["status"]).inner_text()
             ementa = await card.locator(SELECTORS["ementa"]).inner_text()
+            if not ementa.strip():
+                # Se ementa veio vazia, usar o fallback 
+                ementa = await card.locator(SELECTORS["ementa_fallback"]).inner_text()
+
             ementa = ementa.replace("Vigência", "").strip()
+            ementa = ementa.replace("Efeitos financeiros", "").strip()
+            
             botoes = card.locator(SELECTORS["botoes"])
 
             link_ficha = None
@@ -38,4 +44,5 @@ class Parser:
             )
             legislacao_data.append(legislacao_obj)
 
-        print(legislacao_data)
+        #print(legislacao_data)
+        return legislacao_data
