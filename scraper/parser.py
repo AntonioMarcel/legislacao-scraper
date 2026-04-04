@@ -11,6 +11,7 @@ class Parser:
 
             titulo = await card.locator(SELECTORS["titulo"]).inner_text()
             titulo = titulo.replace("Veto Parcial", "").strip()
+            titulo = titulo.replace("Veto Total", "").strip()
             status = await card.locator(SELECTORS["status"]).inner_text()
             ementa = await card.locator(SELECTORS["ementa"]).inner_text()
             if not ementa.strip():

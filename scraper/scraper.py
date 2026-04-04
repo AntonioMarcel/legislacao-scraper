@@ -1,3 +1,4 @@
+import asyncio
 import math
 
 from playwright.async_api import async_playwright
@@ -14,10 +15,14 @@ class Scraper:
     async def run(self):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=False)
-            page = await browser.new_page()
+            context = await browser.new_context(
+                viewport={"width": 1280, "height": 900},
+                user_agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            )
+            page = await context.new_page()
 
             await page.goto(BASE_URL)
-            await page.locator(SELECTORS["btn_pesquisar"]).click()
+            await page.evaluate("pesquisaLegislacao('0')")
             await page.wait_for_selector(SELECTORS["cards"])
 
             await page.wait_for_selector(SELECTORS["total_resultados"])
@@ -29,7 +34,7 @@ class Scraper:
             with self.writer as writer:
 
                 for pagina in range(total_paginas):
-                    print(pagina)
+                    print(f"Página {pagina+1} de {total_paginas}")
                     offset = pagina * 10
                     await page.evaluate(f"pesquisaLegislacao('{pagina}', '{offset}')")
                     await page.wait_for_selector(SELECTORS["cards"])

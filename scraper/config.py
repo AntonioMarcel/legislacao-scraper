@@ -12,7 +12,7 @@ Referência de sintaxe:
 BASE_URL = "https://legislacao.presidencia.gov.br/#"
 
 SELECTORS = {
-    "btn_pesquisar": "a.nav-link.dropdown-toggle.pl-4.pr-4.mr-2.btn.btn-secondary.btn-round.text-white.d-none.d-sm-block",
+    "btn_pesquisar": "a.btn.btn-secondary.btn-round",
     "total_resultados": "h4.pb-2.fw-bold",
     "cards": "div.card.p-2.pr-3.pl-3.w-100",
     "titulo": "h4.card-title",
